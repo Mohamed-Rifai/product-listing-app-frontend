@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import axios from '../../axios'
 
 const AddProduct = () => {
@@ -6,40 +7,50 @@ const AddProduct = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([])
+  const navigate = useNavigate();
+
+  
+useEffect(()=>{
+
+axios
+     .get('/get-all-category')
+     .then((res)=>{
+        
+        const allCategories = res.data
+        const subCategories = allCategories.filter(category => category.parent !==null)
+        console.log(subCategories);
+        setCategories(subCategories)
+     })
+     .catch((err)=> {
+        console.log('add product useEffect :',err);
+     })
+
+},[])
 
 
-  const categories = [
-    {
-      name: 'ios',
-      id: 123
-    },
-    {
-      name: 'android',
-      id: 456
-    },
-    {
-      name: 'mac',
-      id: 789
-    },
-    {
-      name: 'windows',
-      id: 1011
-    }
-  ]
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+
+    const selectedCategory = categories.find((cat) => cat.name === category);
+
 
     const productData = {
         name,
         price,
         description,
-        category :"634c4568f0234567890abcde"
+        category :selectedCategory._id
       };
+      console.log(productData);
   
       axios.post("/add-product", productData)
         .then(function (res) {
          
           alert("Product created successfully!");
+          navigate('/')
+
         })
         .catch(function (err) {
           
@@ -90,7 +101,7 @@ const AddProduct = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="" disabled selected>
+            <option value="" disabled>
     Choose your category
   </option>
             {categories && categories.map((category) => (
