@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import axios from '../../axios'
 
 const AddProduct = () => {
@@ -60,10 +60,11 @@ axios
 
   return (
     <div className="container p-5">
+      
       <header className="mb-4">
         <h1>Add Product</h1>
       </header>
- 
+     
       <form onSubmit={handleSubmit} className="  justify-content-center">
         <div className="col-md-6">
           <input
@@ -72,6 +73,7 @@ axios
             placeholder="Product name"
             className="form-control mb-3"
             value={name}
+            required
             onChange={(e) => setName(e.target.value)}
           />
         </div>
@@ -82,6 +84,7 @@ axios
             placeholder="Price"
             className="form-control mb-3"
             value={price}
+            required
             onChange={(e) => setPrice(e.target.value)}
           />
         </div>
@@ -91,6 +94,7 @@ axios
             placeholder="Description"
             className="form-control mb-3"
             value={description}
+            required
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
@@ -99,6 +103,7 @@ axios
             name="category"
             className="form-control mb-3"
             value={category}
+            required
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="" disabled>
@@ -117,6 +122,15 @@ axios
           </button>
         </div>
       </form>
+      
+      <div className="text-right  p-2">
+        <Link to={'/'}
+          className="btn btn-secondary"
+          
+        >
+          go back
+        </Link>
+      </div>
       
     </div>
   );

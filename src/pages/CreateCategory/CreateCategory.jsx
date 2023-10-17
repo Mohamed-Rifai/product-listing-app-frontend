@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
 import axios from "../../axios";
+import { Link } from "react-router-dom";
 
 const CreateCategory = () => {
   const [mainCategories, setMainCategories] = useState([]);
@@ -31,6 +32,7 @@ const CreateCategory = () => {
   };
 
   const handleSubCategoryName = (e) => {
+
     setSubCategoryName(e.target.value);
   };
 
@@ -66,6 +68,7 @@ const CreateCategory = () => {
   return (
     <div className="container mt-4">
       <h2>Add Your Categories</h2>
+     
       <div className="row">
         <form onSubmit={handleSubmit} className="row">
           <div className="col-8">
@@ -75,6 +78,7 @@ const CreateCategory = () => {
               className="form-control"
               placeholder="Category Name"
               value={categoryName}
+              required
               onChange={handleCategoryName}
             />
           </div>
@@ -90,16 +94,17 @@ const CreateCategory = () => {
         <ul>
           {mainCategories.map((category, index) => (
             <li key={index}>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center p-3 ">
                 <h5>{category.name}</h5>
                 <button
-                  className="btn btn-primary ml-2"
+                  className="btn btn-primary p-1  "
                   onClick={() => openModal(category._id)}
                 >
                   Add Subcategory
                 </button>
               </div>
               <ul>
+
                 {/* Render subcategories  */}
                 {subCategories
                   .filter(subcategory => subcategory.parent === category._id)
@@ -111,6 +116,8 @@ const CreateCategory = () => {
           ))}
         </ul>
       </div>
+      <Link to="/">Home</Link> 
+
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Add Subcategory</Modal.Title>
@@ -122,6 +129,7 @@ const CreateCategory = () => {
             className="form-control"
             placeholder="Subcategory Name"
             value={subCategoryName}
+            required
             onChange={handleSubCategoryName}
           />
         </Modal.Body>

@@ -59,13 +59,20 @@ const ProductList = () => {
         <h1 className="text-center">Enjoy our products!</h1>
       </header>
 
-      <h2 className="text-center mb-3">Electronics ({totalCount})</h2>
-
-      <h1 className="mb-2">Subcategories:</h1>
-
+      <h2 className="text-center mb-3">Electronics ({products.length})</h2>
+      <div className="d-flex justify-content-end">
+        <Link to="/add-products" className="btn btn-success">
+          Add Product
+        </Link>
+        <Link to="/create-category" className="btn btn-info">
+          Add Category
+        </Link>
+      </div>
+      <p className="mb-2" onClick={() => setSelectedCategory("All")}>Subcategories: </p>
+     
       <ul className="list-group" >
       <li className="list-group-item">
-     <Link onClick={() => setSelectedCategory("All")}>All ({products.length})</Link>
+     
    </li>
   {categories.map((category) => (
     
@@ -85,12 +92,12 @@ const ProductList = () => {
 
       {filteredSubcategories.length > 0 && (
         <>
-          <h3 className="mb-2">Subcategories:</h3>
+          <p className="mb-2">Subcategories:</p>
           <ul className="list-group" style={{ display: "flex", flexDirection: "column" }}>
             {filteredSubcategories.map((subcategory) => (
-              <li className="list-group-item" key={subcategory._id} onClick={() => setSelectedSubCategory(subcategory.name)}>
+            <li>  <Link className="list-group-item" key={subcategory._id} onClick={() => setSelectedSubCategory(subcategory.name)}>
                 {subcategory.name} ({subcategory.productCount})
-              </li>
+              </Link></li>
             ))}
           </ul>
         </>
@@ -101,10 +108,10 @@ const ProductList = () => {
           ? filteredProductsBySubcategory.map((product) => (
               <div className="col-md-4 mb-3" key={product._id}>
                 <div className="card">
-                  <img className="card-img-top" src={product.image} alt={product.name} />
+                  <img className="card-img-top" src={'https://via.placeholder.com/200x200'} alt={product.name} />
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">{product.description}</p>
+                    <p className="card-text">{product.price}</p>
                     <Link to={`/products/${product._id}`} className="btn btn-primary">
                       View product
                     </Link>
@@ -118,7 +125,7 @@ const ProductList = () => {
                   <img className="card-img-top" src={product.image} alt={product.name} />
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
-                    <p className="card-text">{product.description}</p>
+                    <p className="card-text">{product.price}</p>
                     <Link to={`/products/${product._id}`} className="btn btn-primary">
                       View product
                     </Link>
