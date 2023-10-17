@@ -4,36 +4,22 @@ import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState("All");
-
-
-
-  const categories = [
-    {
-      name: "635c4568f0234567890abcde",
-      id: 123
-    },
-    {
-      name: 'Laptop',
-      id: 456
-    },
-    {
-      name: 'Tablet',
-      id: 789
-    },
-   
-  ]
-
-
-
-
   
+
+
+
+
+ 
   useEffect(() => {
     // Get the products from the backend
     axios.get("/get-all-products")
       .then(function (res) {
-        console.log(res.data);
-        setProducts(res.data);
+      
+        setProducts(res.data.products);
+        setCategories(res.data.mainCategories)
+
       })
       .catch(function (err) {
         console.log(err);
@@ -45,7 +31,8 @@ const ProductList = () => {
     if (category === "All") {
       return products;
     } else {
-      return products.filter((product) => product.category === category);
+      console.log(category);
+      return products.filter((product) => product.category.parent === category._id);
     }
   };
   
@@ -53,8 +40,7 @@ const ProductList = () => {
   
 
   const totalCount = products.length
-  const count = products.filter((product) => product.category === selectedCategory).length;
- console.log(count);
+ 
   
   return (
     <div className="container">
@@ -70,11 +56,11 @@ const ProductList = () => {
       <li className="list-group-item">
      <Link onClick={() => setSelectedCategory("All")}>All ({products.length})</Link>
    </li>
-  {categories.map((subcategory) => (
+  {categories.map((category) => (
     
-    <li className="list-group-item" key={subcategory.id}>
-      <Link  onClick={() => setSelectedCategory(subcategory.name)}>
-        {subcategory.name} ({count})
+    <li className="list-group-item" key={category.id}>
+      <Link  onClick={() => setSelectedCategory(category)}>
+        {category.name} ({category.productCount})
       </Link>
     </li>
   ))}
@@ -88,9 +74,9 @@ const ProductList = () => {
       <div className="card-body">
         <h5 className="card-title">{product.name}</h5>
         <p className="card-text">{product.description}</p>
-        <a href={`/products/${product.id}`} className="btn btn-primary">
+        <Link to={`/products/${product.id}`} className="btn btn-primary">
           View product
-        </a>
+        </Link>
       </div>
     </div>
   </div>
@@ -103,58 +89,46 @@ const ProductList = () => {
 
 export default ProductList;
 
-//------------------------------------------------------------------------------
+
 
 // import React, { useState, useEffect } from "react";
-// import axios from "../../axios";
-// import { Link } from "react-router-dom";
+// import {Link} from 'react-router-dom'
+// import axios from '../../axios';
 
 // const ProductList = () => {
 //   const [products, setProducts] = useState([]);
-//   const [selectedCategory, setSelectedCategory] = useState("All");
 //   const [categories, setCategories] = useState([]);
-  
+//   const [selectedCategory, setSelectedCategory] = useState("All");
+
 //   useEffect(() => {
 //     // Get the products from the backend
 //     axios.get("/get-all-products")
 //       .then(function (res) {
+//         setProducts(res.data.products);
         
-//         setProducts(res.data);
 //       })
 //       .catch(function (err) {
 //         console.log(err);
 //       });
-      
+
 //     // Get the categories from the backend
 //     axios.get("/get-all-category")
 //       .then(function (res) {
-//         const categorizedCategories = res.data
-//         console.log(res.data);
-//         const mainCategories = categorizedCategories.filter(category => category.parent ===null);
-
-//         setCategories(mainCategories);
+//         setCategories(res.data);
 //       })
 //       .catch(function (err) {
 //         console.log(err);
 //       });
 //   }, []);
-//      console.log(products);
-//   // Function to filter products based on category
+
 //   const filterProducts = (products, category) => {
 //     if (category === "All") {
 //       return products;
 //     } else {
-//       return products.filter((product) => product.category === category);
+//       return products.filter((product) => product.category.name === category);
 //     }
 //   };
 
-//   // Calculate the count of products in each category
-//   const categoryCounts = categories.reduce((countMap, category) => {
-//     countMap[category._id] = products.filter((product) => product.category === category._id).length;
-//     return countMap;
-//   }, {});
-
-//   // Filter the products based on the selected category
 //   const filteredProducts = filterProducts(products, selectedCategory);
 
 //   return (
@@ -169,19 +143,19 @@ export default ProductList;
 
 //       <ul className="list-group" style={{ display: "flex", flexDirection: "column" }}>
 //         <li className="list-group-item">
-//           <Link to="#" onClick={() => setSelectedCategory("All")}>All ({products.length})</Link>
+//           <Link onClick={() => setSelectedCategory("All")}>All ({products.length})</Link>
 //         </li>
-//         {categories.map((category) => (
-//           <li className="list-group-item" key={category._id}>
-//             <Link to="#" onClick={() => setSelectedCategory(category._id)}>
-//               {category.name} ({categoryCounts[category._id]})
+//         {categories.map((subcategory) => (
+//           <li className="list-group-item" key={subcategory.id}>
+//             <Link onClick={() => setSelectedCategory(subcategory.name)}>
+//               {subcategory.name} ({filteredProducts.length})
 //             </Link>
 //           </li>
 //         ))}
 //       </ul>
 
 //       <div className="row mt-5">
-//         {filteredProducts.map((product) => (
+//         {/* {filteredProducts.map((product) => (
 //           <div className="col-md-4 mb-3" key={product.id}>
 //             <div className="card">
 //               <img className="card-img-top" src={product.image} alt={product.name} />
@@ -194,15 +168,10 @@ export default ProductList;
 //               </div>
 //             </div>
 //           </div>
-//         ))}
+//         ))} */}
 //       </div>
 //     </div>
 //   );
 // };
 
 // export default ProductList;
-
-
-
-
-
