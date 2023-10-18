@@ -13,7 +13,7 @@ const ProductList = () => {
   const categories = useSelector((state) => state.categories)
   const subcategories = useSelector((state)=> state.subcategories)
 
-  
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
 

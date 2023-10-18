@@ -1,5 +1,6 @@
-import React, {useState } from "react";
+import React, {useEffect, useState } from "react";
 import {Link, useNavigate} from 'react-router-dom'
+import {setSubCategory} from '../../app/reducers/subCateReducer'
 import {useSelector} from 'react-redux'
 import axios from '../../axios'
 
@@ -13,6 +14,19 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   
   const navigate = useNavigate();
+
+
+
+//  useEffect(()=> {
+
+// if(categories.length === 0){
+  
+    
+
+// }
+
+//  },[])
+
 
   
   const handleSubmit = (e) => {
