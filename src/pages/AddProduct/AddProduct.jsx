@@ -1,35 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import {Link, useNavigate} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 import axios from '../../axios'
 
 const AddProduct = () => {
+
+  
+  const categories = useSelector((state)=>state.subcategories)
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState([])
+  
   const navigate = useNavigate();
 
   
-useEffect(()=>{
-
-axios
-     .get('/get-all-category')
-     .then((res)=>{
-        
-        const allCategories = res.data
-        const subCategories = allCategories.filter(category => category.parent !==null)
-        console.log(subCategories);
-        setCategories(subCategories)
-     })
-     .catch((err)=> {
-        console.log('add product useEffect :',err);
-     })
-
-},[])
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
 

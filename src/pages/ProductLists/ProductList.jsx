@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
+import {setProduct} from '../../app/reducers/productsReducer'
+import {setCategories} from '../../app/reducers/categoriesReducer'
+import {setSubCategory} from '../../app/reducers/subCateReducer'
 import { Link } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
 import axios from "../../axios";
 import './productList.css'
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [subcategories, setSubcategories] = useState([]);
+  const dispatch = useDispatch()
+  const product = useSelector((state)=>state.products)
+  const categories = useSelector((state) => state.categories)
+  const subcategories = useSelector((state)=> state.subcategories)
+
+  
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
 
@@ -15,15 +22,22 @@ const ProductList = () => {
     axios
       .get("/get-all-products")
       .then(function (res) {
-        setProducts(res.data.products);
-        setCategories(res.data.mainCategories);
-        setSubcategories(res.data.subcategories);
+
+
+        dispatch(setProduct(res.data.products))
+        
+        dispatch(setCategories(res.data.mainCategories))
+        
+        dispatch(setSubCategory(res.data.subcategories))
+        
+        
+        
       })
       .catch(function (err) {
         console.log(err);
       });
   }, []);
-
+   
   const filterProducts = (products, category) => {
     if (category === "All") {
       return products;
@@ -32,7 +46,7 @@ const ProductList = () => {
     }
   };
 
-  const filteredProducts = filterProducts(products, selectedCategory);
+  const filteredProducts = filterProducts(product, selectedCategory);
 
   // Filter subcategories of main category
   const filteredSubcategories = subcategories.filter(
@@ -51,7 +65,7 @@ const ProductList = () => {
       </header>
 
       <div className="d-flex justify-content-between">
-        <h2 className="mb-3">Electronics ({products.length})</h2>
+        <h2 className="mb-3">Electronics ({product.length})</h2>
         <div className="btn-group">
           <Link to="/add-products" className="btn btn-success">
             Add Product
